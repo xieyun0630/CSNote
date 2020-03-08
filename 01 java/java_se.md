@@ -274,10 +274,9 @@ btn.setOnAction(event -> circlePane.enlarge());
 
 ### 可观察对象监听器 [	](java_se_20191219101334742)
 
-- Observable的实例，使用{{c1::`addListener`与`removeListener`}}添加或删除实现{{c1::`InvalidationListener`监听器}}对象
+- Observable的实例，使用{{c1::`addListener`与`removeListener`}}添加或删除实现{{c1::`InvalidationListener`监听器}}对象，用于监听可观察对象的添加于修改
 - 每个绑定属性都是{{c1::Observable的实例}}
 - Observable与InvalidationListener接口源码：
-
 ```java
 //{{c1::
 public interface Observable {
