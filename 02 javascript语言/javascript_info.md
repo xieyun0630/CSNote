@@ -630,40 +630,6 @@ let num = 12.36;
 alert( num.toFixed(1) ); {{c1::// "12.4"}}
 ```
 
-### 如何解决`javascript`数字精度丢失问题  [	](javascript_info_20191219101334467)
-
-我们能解决这个问题吗？当然，有很多方法：
-
-{{c1::
-
-1. 我们可以在特定函数的帮助下对结果进行四舍五入 [toFixed(n)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed)：
-
-   ```javascript
-   let sum = 0.1 + 0.2;
-   alert( sum.toFixed(2) ); // 0.30
-   ```
-
-   请注意 `toFixed` 总是返回一个字符串。它确保它在小数点后有 2 位数字。如果我们有电子购物并需要显示 `0.30 美元`，这实际上很方便。对于其他情况，我们可以使用一元加号将它强制为一个数字：
-
-   ```javascript
-   let sum = 0.1 + 0.2;
-   alert( +sum.toFixed(2) ); // 0.3
-   ```
-
-2. 我们可以暂时将数字转换为数学整数，然后将其恢复。它是这样工作的：
-
-   ```javascript
-   alert( (0.1 * 10 + 0.2 * 10) / 10 ); // 0.3
-   ```
-
-   这是有效的，因为当我们做 `0.1 * 10 = 1` 和 `0.2 * 10 = 2` 时，那么这两个数字就变成了整数，并且没有精度损失。
-
-3. 如果我们在与一家商店打交道，那么最激进的解决方案就是将所有价格存储在美分中，并且根本不使用分数。但是，如果我们应用 30％ 的折扣呢？在实践中，完全回避分数是很难实现的，所以上述解决方案有助于避免这种缺陷。
-
-   }}
-
-   
-
 ### `js`中`isNaN`和`Number.isNaN`的区别  [	](javascript_info_20191219101334468)
 
 {{c1::
@@ -976,7 +942,7 @@ let value = arr.reduce(function(previousValue, item, index, arr) {
 ```
 }}
 
-### `Array.isArray`  [	](javascript_info_20191219101334509)
+### `Array.isArray` 的作用  [	](javascript_info_20191219101334509)
 
  {{c1::  
 
@@ -1239,34 +1205,11 @@ function showMenu({
 
 showMenu(options);
 ```
+注意：
+- 对象属性需要相同的名字
+- 数组元素名称任意但是要注意顺序
 
 我们可以通过指定空对象 `{}` 为整个函数参数的默认值。
-
-### 解构赋值总结  [	](javascript_info_20191219101334544)
-
-- 解构赋值允许将对象或数组立即映射到多个变量上。
-
-- 解构对象的语法：
-
-  ```javascript
-  //{{c1::
-  let {prop : varName = default, ...} = object
-  }}
-  ```
-
-  {{c1:: 这表示属性 `prop` 会被赋值给变量 `varName`，如果没有这个属性的话，就会使用 `default` 的值。}}
-
-- 解构数组的语法：
-
-  ```javascript
-  //{{c1:: 
-  let [item1 = default, item2, ...rest] = array
-  }}
-  ```
-
-  {{c1::  数组的第一个元素赋值给 `item1`，第二个元素赋值给 `item2`，剩下的所有组成另一个数组 `rest`。}}
-
-- 更多复杂的案例情况下，等号左侧必须和等号右侧有相同的结构。
 
 ## 日期和时间  [	](javascript_info_20191219101334546)
 
@@ -1357,13 +1300,13 @@ alert(json);
 */
 ```
 
-### JSON 是跨语言的纯数据规范，因此一些特定于 JavaScript 的对象属性被 `JSON.stringify` 跳过。  [	](javascript_info_20191219101334558)
+###  `JSON.stringify` 会跳过的3种类型的值  [	](javascript_info_20191219101334558)
 
 - {{c1::函数属性（方法）。}}
 
 - {{c1::Symbolic 属性。}}
 
-- {{c1::存储 `undefined` 的属性。}}
+- {{c1::存储 `undefined` 的属性。}}解构赋值总结
 
 {{c1::
 
@@ -2442,42 +2385,8 @@ function showArgs() {
 - 基本数据类型同样在{{c1::包装对象的原型}}上存储方法：{{c1::`Number.prototype`、`String.prototype` 和 `Boolean.prototype`。只有 `undefined` 和 `null` 没有包装对象。}}
 - 内置对象的原型可以被修改或者被新的方法填充。但是这样做是不被推荐的。只有当添加一个还没有被 JavaScript 引擎支持的新方法的时候才可能允许这样做。
 
-### task:给函数添加一个方法 “f.defer(ms)”  [	](javascript_info_20191219101334672)
-
-为所有函数的原型添加 `defer(ms)` 方法，能够在 `ms` 毫秒后执行函数。
-
-当你完成添加后，下面的代码应该是可执行的：
-
-```javascript
-function f() {
-  alert("Hello!");
-}
-
-f.defer(1000); // 1 秒后显示 “Hello!”
-```
-
----
-{{c1::
-
-```javascript
-Function.prototype.defer = function(ms) {
-  setTimeout(this, ms);
-};
-
-function f() {
-  alert("Hello!");
-}
-
-f.defer(1000); // shows "Hello!" after 1 sec
-```
-}}
-
-### task:添加装饰器方法 “defer()” 到函数  [	](javascript_info_20191219101334673)
-
-添加方法 `defer(ms)` 到所有的函数原型，它返回一个包装函数，延迟 `ms` 毫秒调用函数。
-
-这里是它应该如何执行的例子：
-
+### 装饰器方法 “defer()”   [	](javascript_info_20191219101334673)
+实现defer()方法，具有以下功能
 ```javascript
 function f(a, b) {
   alert( a + b );
@@ -2510,7 +2419,7 @@ f.defer(1000)(1, 2); // shows 3 after 1 sec
 
 获取/设置原型的方式有很多，我们已知的有：
 
-- [Object.create(proto[, descriptors\])](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/create) —— {{c1::利用 `proto` 作为 `[[Prototype]]` 和可选的属性描述来创建一个空对象。}}
+- [Object.create(proto\[, descriptors\])](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/create) —— {{c1::利用 `proto` 作为 `[[Prototype]]` 和可选的属性描述来创建一个空对象。}}
 - [Object.getPrototypeOf(obj)](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/getPrototypeOf) ——{{c1:: 返回 `obj` 对象的 `[[Prototype]]`。}}
 - [Object.setPrototypeOf(obj, proto)](https://developer.mozilla.org/zh/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf) ——{{c1:: 将 `obj` 对象的 `[[Prototype]]` 设置为 `proto`。}}
 
@@ -2829,10 +2738,7 @@ alert(filteredArr.isEmpty()); // Error: filteredArr.isEmpty is not a function
 - 比如，`Array` 和 `Data` 都是继承自 `Object`，所以它们的实例都有来自 `Object.prototype` 的方法
 - 但是{{c1:: `Array.[[Prototype]]` 不指向 `Object`，所以它们没有例如 `Array.keys()`(或者 `Data.keys()`)的静态方法。}}
 
-### 类型检测：自定义"instanceof"的使用 [	](javascript_info_20191230080406389)
-
-静态方法 `Symbol.hasInstance` 的使用
-
+### 类型检测：静态方法 `Symbol.hasInstance` 的使用例子 [	](javascript_info_20191230080406389)
 ```javascript
 // 假设具有 canEat 属性的对象为动物类
 class Animal {
@@ -2997,9 +2903,11 @@ try {
 ### 全局 catch  ` window.onerror`的使用 [	](javascript_info_20200114084259605)
 
 ```js
+  //{{c1::
   window.onerror = function(message, url, line, col, error) {
     alert(`${message}\n At ${line}:${col} of ${url}`);
   };
+  //}}
 
   function readData() {
     badFunc(); // 哦，出问题了！
@@ -3310,17 +3218,17 @@ Promise.all(
 
 ```javascript
 Promise.all([
+  //{{c1::
   new Promise((resolve, reject) => {
     setTimeout(() => resolve(1), 1000)
   }),
   2, // 视为 Promise.resolve(2)
   3  // 视为 Promise.resolve(3)
+  //}}
 ]).then(alert); // 1, 2, 3
 ```
 
 ### `Promise.allSettled`静态方法 [	](javascript_info_20200308041234744)
-
-- - 
 
 ```javascript
 let urls = [
@@ -3364,6 +3272,7 @@ Promise.allSettled(urls.map(url => fetch(url)))
 ```js
 if(!Promise.allSettled) {
   Promise.allSettled = function(promises) {
+    //{{c1::
     return Promise.all(promises.map(p => Promise.resolve(p).then(v => ({
       state: 'fulfilled',
       value: v,
@@ -3371,6 +3280,7 @@ if(!Promise.allSettled) {
       state: 'rejected',
       reason: r,
     }))));
+    //}}
   };
 }
 ```
